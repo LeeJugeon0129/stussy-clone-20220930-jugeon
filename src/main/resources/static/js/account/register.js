@@ -23,9 +23,26 @@ registerButton.onclick = () => {
            alert("회원가입 요청 성공");
        },
        error: (error) => {                                           //실패시
-           alert("회원가입 요청 실패");
+           console.log(error.responseJSON.data);
+           loadErrorMessage(error.responseJSON.data);
        }
     }); //jquery = $표시 //ajax 호출
 
 
+}
+
+function loadErrorMessage(errors) {
+    const errorList = document.querySelector(".errors");
+    const errorMsgs = document.querySelector(".error-msgs");
+    const errorArray = Object.values(errors) //배열이 된다.
+    
+    errorMsgs.innerHTML = "";
+
+    errorArray.forEach(error => {
+        errorMsgs.innerHTML += `
+            <li>${error}</li>
+        `;
+    })
+
+    errorList.classList.remove("errors-invisible");
 }

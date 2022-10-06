@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class StussyClone20220930JugeonApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(StussyClone20220930JugeonApplication.class, args);
 	}
 
