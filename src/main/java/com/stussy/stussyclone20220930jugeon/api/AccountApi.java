@@ -1,5 +1,6 @@
 package com.stussy.stussyclone20220930jugeon.api;
 
+import com.stussy.stussyclone20220930jugeon.aop.annotation.LogAspect;
 import com.stussy.stussyclone20220930jugeon.dto.CMRespDto;
 import com.stussy.stussyclone20220930jugeon.dto.RegisterReqDto;
 import com.stussy.stussyclone20220930jugeon.dto.validation.ValidationSequence;
@@ -17,9 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/api/account")
-@RestController //일반 컨트롤러에 리스폰스 바디를 항상 가지고 있음
+@RestController //@Controller + @ResponseBody
 public class AccountApi {
 
+    @LogAspect //여기에 aop 적용해라
     @PostMapping("/register")              //@RequestBody : json으로 받기 //@Valid : 유효성 검사
     public ResponseEntity<?> register(@Validated(ValidationSequence.class) @RequestBody RegisterReqDto registerReqDto, BindingResult bindingResult) {
         return ResponseEntity.created(null).body(new CMRespDto<>("회원가입 성공", registerReqDto));

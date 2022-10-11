@@ -9,6 +9,7 @@ public class AccountController {
 
     @GetMapping("/account/login")
     public String login() {
+
         return "account/login";
     }
     @GetMapping("/account/register")

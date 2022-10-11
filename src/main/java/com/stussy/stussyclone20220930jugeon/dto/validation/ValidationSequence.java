@@ -3,7 +3,8 @@ package com.stussy.stussyclone20220930jugeon.dto.validation;
 import javax.validation.GroupSequence;
 import javax.validation.groups.Default;
 
-@GroupSequence({ValidationGroups.NotBlankGroup.class,
+@GroupSequence({
+        ValidationGroups.NotBlankGroup.class,
         ValidationGroups.SizeGroup.class,
         ValidationGroups.PatternCheckGroup.class,
         Default.class

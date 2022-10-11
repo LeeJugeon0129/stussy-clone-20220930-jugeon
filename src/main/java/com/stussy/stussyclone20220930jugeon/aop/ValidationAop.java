@@ -18,10 +18,12 @@ import java.util.Map;
 @Component
 public class ValidationAop {
                                                             //.. = 하위 모든
-    @Pointcut("execution(* com.stussy.stussyclone20220930jugeon..*Api.*(..))") //get* = get으로 시작하는 메소드명 전체//(..) = 메소드만 적으면 된다.
-                         //* = 모든 리턴 자료형 허용
-    private void executionPointCut(){}
+    @Pointcut("execution(* com.stussy.stussyclone20220930jugeon..*Api.*(..))")
+    // *모든 메소드에 적용해라. get* get으로 시작하는 메소드 적용, set* set으로 시작 하는,  *.*는 모든 클래스
+    // *api.* api로 끝나는 클래스 모두
+    // 패키지는 지우고 ..으로 하면 하위 모든 패키지 적용.
 
+    private void executionPointCut(){}
 
     @Around("executionPointCut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -31,7 +33,6 @@ public class ValidationAop {
         BeanPropertyBindingResult bindingResult =null;
 
         for(Object arg : args){
-            System.out.println(arg);
             if(arg.getClass() == BeanPropertyBindingResult.class){
                  bindingResult = (BeanPropertyBindingResult) arg;
                  break;
@@ -43,8 +44,6 @@ public class ValidationAop {
 
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
             for(FieldError fieldError : fieldErrors){
-                System.out.println("필드명 : " + fieldError.getField()); //키
-                System.out.println("에러 메세지 : " + fieldError.getDefaultMessage()); //밸류
                 errorMap.put(fieldError.getField(), fieldError.getDefaultMessage()); //키, 밸류
             }
 
