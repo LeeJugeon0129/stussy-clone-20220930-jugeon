@@ -18,7 +18,7 @@ public class RegisterReqDto {
 
     @NotBlank(message = "성은 비워 둘 수 없습니다", groups = ValidationGroups.NotBlankGroup.class)
     @Size(min = 1, max = 2, message = "성은 2글자까지만 입력가능합니다", groups = ValidationGroups.SizeGroup.class)
-    @Pattern(regexp = "^[가-힇]*$ ", message = "한글만 입력가능합니다", groups = ValidationGroups.PatternCheckGroup.class)
+    @Pattern(regexp = "^[가-힇]*$", message = "한글만 입력가능합니다", groups = ValidationGroups.PatternCheckGroup.class)
     private String firstName;
 
     @NotBlank(message = "이메일은 비워 둘 수 없습니다", groups = ValidationGroups.NotBlankGroup.class)
