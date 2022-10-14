@@ -1,5 +1,6 @@
 package com.stussy.stussyclone20220930jugeon.config;
 
+import com.stussy.stussyclone20220930jugeon.security.AuthFailureHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,12 +24,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/account/mypage", "/index")
                 .authenticated()
+                .antMatchers("/admin/**") //이 주소로 시작하는거는
+                .hasRole("ADMIN") //ADMIN 권한이 있어야 한다.
                 .anyRequest()
                 .permitAll()
                 .and()
                 .formLogin()
+                .usernameParameter("email")
                 .loginPage("/account/login") // login page Get 요청
                 .loginProcessingUrl("/account/login") // login service Post 요청
+                .failureHandler(new AuthFailureHandler())
                 .defaultSuccessUrl("/index");
     }
 }
