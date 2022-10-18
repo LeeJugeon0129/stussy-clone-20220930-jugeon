@@ -38,7 +38,7 @@ const RegisterEventService = {
         this.getPriceInputObj().onkeyup = () => {
             if(this.getPriceInputObj().value.length != 0){
                 this.getRegistButtonObj().disabled = false;
-                this.getRegistInfo().classList  .remove("regist-info-invisible");
+                this.getRegistInfo().classList.remove("regist-info-invisible");
             }else{
                 this.getRegistButtonObj().disabled = true;
                 this.getRegistInfo().classList.add("regist-info-invisible");
@@ -73,7 +73,7 @@ const RegisterRequestService = {
             contentType: "application/json",
             data: JSON.stringify(RegisterObj),
             dataType: "json",
-            success: (reponse) => {
+            success: (response) => {
                 responseResult = response.data;
             },
             error: (error) => {
