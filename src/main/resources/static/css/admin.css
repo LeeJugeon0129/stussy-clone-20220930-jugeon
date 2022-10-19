@@ -41,13 +41,15 @@
 
 }
 
-input[type=text]{
+input[type="text"], input[type="number"]{
     height: 36px;
+}
+input[type="number"] {
+    text-align: right;
 }
 
 textarea {
     height: 100%;
-    
     resize: none;
     overflow-y: auto; /*auto : 필요 시에만 스크롤 생성*/
 }
