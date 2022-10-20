@@ -1,11 +1,11 @@
 class ProductMst {
     #category; //# = private -> 캡슐화
     #name;
-    #price; 
-    #simpleInfo; 
-    #detailInfo; 
-    #optionInfo; 
-    #managementInfo; 
+    #price;
+    #simpleInfo;
+    #detailInfo;
+    #optionInfo;
+    #managementInfo;
     #shippingInfo;
 
     constructor(category, name, price, simpleInfo, detailInfo, optionInfo, managementInfo, shippingInfo) {
@@ -58,7 +58,28 @@ class ProductMst {
     }
 }
 
+class CommonApi {
+    getCategoryList() {
+        let responseResult = null;
 
+        $.ajax({
+            async:false,
+            type: "get",
+            url:"/api/admin/product/category",
+            dataType: "json",
+            success: (response) => {
+                responseResult = response.data;
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        
+        });
+    
+        return responseResult;
+    
+    }
+}
 
 class RegisterApi {
     createProductRequest(productMst) {
@@ -188,6 +209,20 @@ class RegisterService {
     loadRegister() {
         
     }
+
+    getCategoryList() {
+        const commonApi = new CommonApi();
+        const productCategoryList = commonApi.getCategoryList();
+
+        const productCategory = document.querySelector(".product-category");
+        productCategory.innerHTML = "";
+
+        productCategoryList.forEach(category => {
+            productCategory.innerHTML += `
+                <option value="${category.id}">${category.name}</option>
+            `;
+        })
+    }
     
     setRegisterHeaderEvent() {
         new RegisterEventService();
@@ -195,5 +230,6 @@ class RegisterService {
 }
 
 window.onload = () => {
+    RegisterService.getInstance().getCategoryList();
     RegisterService.getInstance().setRegisterHeaderEvent();
 }

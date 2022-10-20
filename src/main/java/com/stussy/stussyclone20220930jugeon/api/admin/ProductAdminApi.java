@@ -4,6 +4,8 @@ import com.stussy.stussyclone20220930jugeon.aop.annotation.LogAspect;
 import com.stussy.stussyclone20220930jugeon.aop.annotation.ValidAspect;
 import com.stussy.stussyclone20220930jugeon.dto.CMRespDto;
 import com.stussy.stussyclone20220930jugeon.dto.admin.ProductRegisterReqDto;
+import com.stussy.stussyclone20220930jugeon.service.admin.ProductManagementService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -14,7 +16,10 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/admin")
+@RequiredArgsConstructor
 public class ProductAdminApi {
+
+    private final ProductManagementService productManagementService;
 
     @LogAspect
     @ValidAspect
@@ -26,7 +31,9 @@ public class ProductAdminApi {
     }
 
     @GetMapping("/product/category")
-    public ResponseEntity<?> getCategoryList() {
-        return ResponseEntity.ok().body(new CMRespDto<>("get successfully", null));
+    public ResponseEntity<?> getCategoryList() throws Exception {
+
+        return ResponseEntity.ok()
+                .body(new CMRespDto<>("get successfully", productManagementService.getCategoryList()));
     }
 }
