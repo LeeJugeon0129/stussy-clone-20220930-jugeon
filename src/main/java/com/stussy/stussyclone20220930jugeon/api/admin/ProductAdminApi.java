@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Random;
 
 
 @RestController
@@ -25,9 +26,21 @@ public class ProductAdminApi {
     @ValidAspect
     @PostMapping("/product")
     public ResponseEntity<?> registerProductMst(
-            @Valid @RequestBody ProductRegisterReqDto productRegisterReqDto, BindingResult bindingResult) {
+            @Valid @RequestBody ProductRegisterReqDto productRegisterReqDto, BindingResult bindingResult) throws Exception {
+
+        String name = productRegisterReqDto.getName();
+
+        Random random = new Random();
+
+        for(int i=0; i<100; i++){
+            productRegisterReqDto.setCategory(i/10 + 1);
+            productRegisterReqDto.setName(name+ (i+1));
+            productRegisterReqDto.setPrice((random.nextInt(10) +1) * 100000); //1부터 10까지 랜덤 * 10만원 -> 100만원까지
+            productManagementService.registerMst(productRegisterReqDto);
+
+        }
         return ResponseEntity.created(null)
-                .body(new CMRespDto<>("Register Successfully", null));
+                .body(new CMRespDto<>("Register Successfully", true));
     }
 
     @GetMapping("/product/category")

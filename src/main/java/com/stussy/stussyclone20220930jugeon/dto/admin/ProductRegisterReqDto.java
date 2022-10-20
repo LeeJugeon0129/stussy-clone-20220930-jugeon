@@ -20,6 +20,14 @@ public class ProductRegisterReqDto {
 
     public Product toEntity() {
         return Product.builder()
+                .category_id((category))
+                .pdt_name(name)
+                .pdt_price(price)
+                .pdt_simple_info(simpleInfo)
+                .pdt_detail_info(detailInfo)
+                .pdt_option_info(optionInfo)
+                .pdt_management_info(managementInfo)
+                .pdt_shipping_info(shippingInfo)
                 .build();
     }
 }

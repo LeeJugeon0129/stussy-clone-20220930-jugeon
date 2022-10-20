@@ -187,7 +187,10 @@ class RegisterEventService {
             );
 
             const registerApi = new RegisterApi();
-            registerApi.createProductRequest(productMst.getObject());
+            if(registerApi.createProductRequest(productMst.getObject())){
+                alert("상품 등록 완료");
+                location.reload();
+            }
         }
     }
 }
@@ -215,7 +218,7 @@ class RegisterService {
         const productCategoryList = commonApi.getCategoryList();
 
         const productCategory = document.querySelector(".product-category");
-        productCategory.innerHTML = "";
+        productCategory.innerHTML = `<option value="none">상품 종류</option>`;
 
         productCategoryList.forEach(category => {
             productCategory.innerHTML += `
