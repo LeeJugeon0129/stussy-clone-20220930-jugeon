@@ -11,7 +11,7 @@
         <result property="category_name" column="category_name"/>
     </resultMap>
 
-   <select id="getCategoryList" resultMap="product_category"><!--  join하면 무조건 resultMap-->
+   <select id="getCategoryList" resultMap="product_category"><!--join하면 무조건 resultMap-->
        select
             id,
             group_id,

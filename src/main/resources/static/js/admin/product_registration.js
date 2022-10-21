@@ -81,9 +81,9 @@ class CommonApi {
     }
 }
 
-class RegisterApi {
+class ProductApi {
     createProductRequest(productMst) {
-        let responseResult = null;
+        let responseData = null;
 
         $.ajax({
             async: false,
@@ -93,7 +93,7 @@ class RegisterApi {
             data: JSON.stringify(productMst),
             dataType: "json",
             success: (response) => {
-                responseResult = response.data;
+                responseData = response.data;
             },
             error: (error) => {
                 console.log(error);
@@ -101,7 +101,26 @@ class RegisterApi {
 
         });
 
-        return responseResult;
+        return responseData;
+    }
+    getProductListRequest(listRequestParams) {
+        let responseData = null; 
+
+        $.ajax({
+            async: false,
+            type: "get",
+            url: "/api/admin/products",
+            data: listRequestParams,
+            dataType: "json",
+            success: (response) => {
+                responseData = response.data;
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        })
+
+        return responseData;
     }
 }
 
@@ -186,7 +205,7 @@ class RegisterEventService {
                 category, name, price, simpleInfo, detailInfo, optionInfo, managementInfo, shippingInfo
             );
 
-            const registerApi = new RegisterApi();
+            const registerApi = new ProductApi();
             if(registerApi.createProductRequest(productMst.getObject())){
                 alert("상품 등록 완료");
                 location.reload();
@@ -229,6 +248,16 @@ class RegisterService {
     
     setRegisterHeaderEvent() {
         new RegisterEventService();
+    }
+}
+class ListService {
+    static #instance = null;
+
+    getInstance() {
+        if(this.#instance == null){
+            this.#instance = new ListService();
+        }
+        return this.#instance;
     }
 }
 

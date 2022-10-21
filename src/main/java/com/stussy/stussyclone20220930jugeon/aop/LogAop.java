@@ -18,12 +18,12 @@ import org.springframework.stereotype.Component;
 public class LogAop { //로그 찍어주고 로그파일 생성해줌
 
     @Pointcut("execution(* com.stussy.stussyclone20220930jugeon.api.*Api.*(..))")
-    private void poinCut() {}
+    private void pointCut() {}
 
     @Pointcut("@annotation(com.stussy.stussyclone20220930jugeon.aop.annotation.LogAspect)")
-    private void annotationPoinCut() {}
+    private void annotationPointCut() {}
 
-    @Around("annotationPoinCut()")
+    @Around("annotationPointCut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
         CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature(); // 다운캐스팅 가능
@@ -38,7 +38,7 @@ public class LogAop { //로그 찍어주고 로그파일 생성해줌
 
         Object result = joinPoint.proceed();
 
-        log.info("<<<< Retrun >>>> {}.{} >>> [{}]", className, methodName, result);
+        log.info("<<<< Return >>>> {}.{} >>> [{}]", className, methodName, result);
 
         return result;
     }

@@ -26,9 +26,9 @@ public class ValidationAop {
 //    private void executionPointCut(){}
 
     @Pointcut("@annotation(com.stussy.stussyclone20220930jugeon.aop.annotation.ValidAspect)")
-    private void annotationPoinCut(){}
+    private void annotationPointCut(){}
 
-    @Around("annotationPoinCut()")
+    @Around("annotationPointCut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
         Object[] args = joinPoint.getArgs();
