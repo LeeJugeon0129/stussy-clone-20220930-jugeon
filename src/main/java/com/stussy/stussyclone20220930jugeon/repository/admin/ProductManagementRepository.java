@@ -1,5 +1,6 @@
 package com.stussy.stussyclone20220930jugeon.repository.admin;
 
+import com.stussy.stussyclone20220930jugeon.domain.OptionProductMst;
 import com.stussy.stussyclone20220930jugeon.domain.Product;
 import com.stussy.stussyclone20220930jugeon.domain.ProductCategory;
 import org.apache.ibatis.annotations.Mapper;
@@ -10,5 +11,6 @@ import java.util.List;
 public interface ProductManagementRepository {
     public List<ProductCategory> getCategoryList() throws Exception;
     public int saveProductMst(Product product) throws Exception;
+    public List<OptionProductMst> getProductMstList() throws Exception;
 
 }

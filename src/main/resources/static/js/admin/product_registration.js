@@ -250,6 +250,7 @@ class RegisterService {
         new RegisterEventService();
     }
 }
+
 class ListService {
     static #instance = null;
 
