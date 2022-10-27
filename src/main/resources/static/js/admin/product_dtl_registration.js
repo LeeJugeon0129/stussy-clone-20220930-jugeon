@@ -10,6 +10,7 @@ class CommonApi { //공통으로 쓰는 Api
 
     getProductMstList() {
         let responseData = null;
+
         $.ajax({
             async: false,
             type: "get",
@@ -22,11 +23,13 @@ class CommonApi { //공통으로 쓰는 Api
                 console.log(error);
             }
         });
+
         return responseData;
     }
     
     getProductSizeList(productId) {
         let responseData = null;
+
         $.ajax({
             async: false,
             type: "get",
@@ -39,6 +42,7 @@ class CommonApi { //공통으로 쓰는 Api
                 console.log(error);
             }
         });
+
         return responseData;
     }
 
@@ -56,6 +60,7 @@ class ProductApi{
     }
 
     registProductDtl(productDtlParams) {
+
         $.ajax({
             async: false,
             type: "post",
@@ -74,6 +79,31 @@ ${error.responseJSON.data.error}
                 `)
             }
         })
+
+    }
+
+    registImgFiles(formData) {
+
+        $.ajax({
+            async: false,
+            type: "post",
+            url: "/api/admin/product/img",
+            ///////////////////////////////파일 전송 시 필수
+            enctype: "multipart/form-data",
+            contentType: false,
+            processData: false,
+            ///////////////////////////////
+            data: formData,
+            dataType: "json",
+            success: (response) => {
+                alert("이미지 등록 완료");
+                location.reload();
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        })
+
     }
 }
 
@@ -87,15 +117,27 @@ class Option {
         return this.#instance;
     }
 
+    constructor(){
+        this.setProductMstSelectOptions();
+        this.addSubmitEvent();
+    }
+
     setProductMstSelectOptions() {
         const pdtMstSelect = document.querySelector(".product-select");
-        CommonApi.getInstance().getProductMstList().forEach(product => {
-            pdtMstSelect.innerHTML += `
-                <option value="${product.pdtId}">(${product.category})${product.pdtName}</option>
-            `
-        });
+        const responseData = CommonApi.getInstance().getProductMstList();
 
-        this.addMstSelectEvent();
+        if(responseData != null) {
+            if(responseData.length > 0){
+                responseData.forEach(product => {
+                    console.log(product);
+                    pdtMstSelect.innerHTML += `
+                        <option value="${product.pdtId}">(${product.category})${product.pdtName}</option>
+                    `;
+                });
+                this.addMstSelectEvent();
+            }
+        }
+
     }
 
     addMstSelectEvent() {
@@ -116,7 +158,7 @@ class Option {
     }
 
     addSubmitEvent() {
-        const registButton = document.querySelector(".regist-button");
+        const registButton = document.querySelectorAll(".regist-button")[0];
         registButton.onclick = () => {
             const productDtlParams = {
                 "pdtId": document.querySelector(".product-select").value,
@@ -129,7 +171,117 @@ class Option {
     }
 }
 
+class ProductImgFile {
+    static #instance = null;
+
+    static getInstance() {
+        if(this.#instance == null){
+            this.#instance = new ProductImgFile();
+        }
+        return this.#instance;
+    }
+
+    newImgList = new Array();
+
+    constructor() {
+        this.addFileInputEvent();
+        this.addUploadEvent();
+    }
+
+    addUploadEvent() {
+        const uploadButton = document.querySelector(".upload-button");
+        uploadButton.onclick = () => {
+            const formData = new FormData();
+
+            const productId = document.querySelector(".product-select").value;
+            formData.append("pdtId", productId);
+
+            this.newImgList.forEach(imgFile => {
+                formData.append("files", imgFile);
+            });
+
+            ProductApi.getInstance().registImgFiles(formData);
+        }
+    }
+
+    addFileInputEvent() {
+        const filesInput = document.querySelector(".files-input");
+        const imgAddButton = document.querySelector(".img-add-button");
+
+        imgAddButton.onclick = () => {
+            filesInput.click();
+        }
+        filesInput.onchange = () => {
+            const formData = new FormData(document.querySelector("form"));
+
+            let changeFlag = false;
+
+            formData.forEach(value => { //value = 파일객체
+                if(value.size != 0) { //이미지 용량         size = 0 -> 파일이 없는 거
+                    this.newImgList.push(value);
+                    changeFlag = true;
+                }
+            })
+
+            if(changeFlag) { //changeFlag가 참일 때
+                this.loadImgs();
+                filesInput.value = null;  //value를 항상 초기화 시켜줘야함.(이미지 인풋의 상태를 초기화) -> 파일 등록 실패해도 안 뜸.
+
+            }
+        }
+    }
+
+    loadImgs() {
+        const fileList = document.querySelector(".file-list");
+        fileList.innerHTML = "";
+
+        this.newImgList.forEach((imgFile, i) => {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                fileList.innerHTML += `
+                    <li class="file-info">
+                        <div class="file-img">
+                            <img src="${e.target.result}">
+                        </div>
+                        <div class="file-name">${imgFile.name}</div>
+                        <button type="button" class="btn delete-button">삭제</button>
+                    </li>
+                `;
+            }
+            //e.target.result = 이미지 주소
+            //e = 이벤트
+            setTimeout(() => {
+                reader.readAsDataURL(imgFile);
+                
+            }, i * 300); //readAsDataURL = 비동기 처리라서 이미지 순서가 안 맞음.   
+
+        });
+
+        setTimeout(() => {
+            this.addDeleteEvent();
+        }, this.newImgList.length * 300);
+
+        // console.log(this.newImgList);
+    
+    }
+
+    addDeleteEvent() {
+        const deleteButtons = document.querySelectorAll(".delete-button");
+
+        deleteButtons.forEach((deleteButton, i) => {
+            deleteButton.onclick = () => {
+                if(confirm("상품을 지우시겠습니까?")){
+                    this.newImgList.splice(i, 1); //i 인덱스부터 1개 지워라
+                    this.loadImgs();
+                }
+            }
+        })
+    }
+
+}
+
 window.onload = () => {
-    Option.getInstance().setProductMstSelectOptions();
-    Option.getInstance().addSubmitEvent();
+    Option.getInstance();
+    ProductImgFile.getInstance();
 }
