@@ -8,6 +8,8 @@ import com.stussy.stussyclone20220930jugeon.repository.admin.ProductManagementRe
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -22,8 +24,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ProductManagementServiceImpl implements ProductManagementService {
 
-    @Value("${file.path}") //yml에 등록해놓고 전역으로 사용 //스프링부트라서 가능
-    private String filePath;
+    private final ResourceLoader resourceLoader;
     private final ProductManagementRepository productManagementRepository;
 
     @Override
@@ -91,16 +92,30 @@ public class ProductManagementServiceImpl implements ProductManagementService {
         List<ProductImg> productImgs = new ArrayList<ProductImg>();
 
         productImgReqDto.getFiles().forEach(file -> {
+            Resource resource = resourceLoader.getResource("classpath:static/upload/product");
+            String filePath = null;
+
+            try{
+                if(!resource.exists()) {
+                    String tempPath = resourceLoader.getResource("classpath:static").getURI().toString();
+                    tempPath = tempPath.substring(tempPath.indexOf("/") + 1);
+
+                    File f = new File( tempPath + "/upload/product");
+                    f.mkdirs(); //make directorys - s 붙이면 하위경로까지 만들어주는 것
+                }
+                filePath = resource.getURI().toString();
+
+                filePath = filePath.substring(filePath.indexOf("/") + 1);
+                System.out.println(filePath);
+            }catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
             String originName = file.getOriginalFilename();
             String extension = originName.substring(originName.lastIndexOf("."));
             String saveName = UUID.randomUUID().toString().replaceAll("-", "") + extension;
 
-            Path path = Paths.get(filePath + "product/" + saveName);//이미지 저장할 경로
-
-            File f = new File(filePath, "product");
-            if(! f.exists()) { //없으면
-                f.mkdirs(); //make directorys - s 붙이면 하위경로까지 만들어주는 것
-            }
+            Path path = Paths.get(filePath + "/" + saveName);//이미지 저장할 경로
 
             try {
                 Files.write(path, file.getBytes());

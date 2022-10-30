@@ -1,5 +1,6 @@
 package com.stussy.stussyclone20220930jugeon.api;
 
+import com.stussy.stussyclone20220930jugeon.aop.annotation.LogAspect;
 import com.stussy.stussyclone20220930jugeon.dto.CMRespDto;
 import com.stussy.stussyclone20220930jugeon.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,14 @@ public class ProductApi {
     private final ProductService productService;
 
 
+    @LogAspect
     @GetMapping("/collections/{category}")
     public ResponseEntity<?> getCollections(@PathVariable String category, int page) throws Exception {
         return ResponseEntity.ok(new CMRespDto<>("Successfully", productService.getProductList(category, page)));
+    }
+
+    @GetMapping("/product/{pdtId}")
+    public ResponseEntity<?> getProduct(@PathVariable int pdtId) throws Exception {
+        return ResponseEntity.ok(new CMRespDto<>("Successfully", productService.getProduct(pdtId)));
     }
 }
