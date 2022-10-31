@@ -78,7 +78,7 @@
             pdt_mst pm
             LEFT OUTER JOIN pdt_dtl pd ON(pd.pdt_id = pm.id)
             LEFT OUTER JOIN pdt_size_dtl psd ON(psd.id = pd.size_id)
-            LEFT OUTER JOIN pdt_size_mst psm ON(psm.id - psd.size_id)
+            LEFT OUTER JOIN pdt_size_mst psm ON(psm.id = psd.size_id)
             LEFT OUTER JOIN pdt_image_mst pim ON(pim.pdt_id = pm.id)
         WHERE
             pm.id = #{pdtId}
