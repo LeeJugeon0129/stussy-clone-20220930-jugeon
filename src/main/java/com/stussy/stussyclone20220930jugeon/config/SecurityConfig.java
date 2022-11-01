@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.httpBasic().disable();
         http.authorizeRequests()
-                .antMatchers("/account/mypage", "/index")
+                .antMatchers("/account/mypage", "/index", "/checkout")
                 .authenticated()
 //                .antMatchers("/admin/**") //이 주소로 시작하는거는
 //                .hasRole("ADMIN") //ADMIN 권한이 있어야 한다.

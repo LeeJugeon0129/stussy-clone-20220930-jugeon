@@ -11,14 +11,14 @@
         <result property="category_name" column="category_name"/>
     </resultMap>
 
-   <select id="getCategoryList" resultMap="product_category"><!--join하면 무조건 resultMap-->
-       select
+    <select id="getCategoryList" resultMap="product_category"><!--join하면 무조건 resultMap-->
+        select
             id,
             group_id,
             category_name
-       from
+        from
             pdt_category_mst
-   </select>
+    </select>
     <insert id="saveProductMst" parameterType="com.stussy.stussyclone20220930jugeon.domain.Product">
         insert into
             pdt_mst
