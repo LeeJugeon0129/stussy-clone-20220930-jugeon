@@ -44,7 +44,11 @@
    </select>
 
 <!--    insert, update, delete 의 리턴값은 row갯수라서 항상 int-->
-    <insert id="saveUser" parameterType="com.stussy.stussyclone20220930jugeon.domain.User">
+    <insert id="saveUser"
+            parameterType="com.stussy.stussyclone20220930jugeon.domain.User"
+            useGeneratedKeys="true"
+            keyProperty="id"
+    >
         insert into
             user_mst
         values(

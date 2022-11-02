@@ -1,6 +1,8 @@
 package com.stussy.stussyclone20220930jugeon.config;
 
 import com.stussy.stussyclone20220930jugeon.security.AuthFailureHandler;
+import com.stussy.stussyclone20220930jugeon.service.PrincipalOauth2Service;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,9 +10,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+
 @EnableWebSecurity
 @Configuration //config 나오면 달아줌
+@RequiredArgsConstructor //DI할 때 필요
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final PrincipalOauth2Service principalOauth2Service;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
@@ -34,6 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/account/login") // login page Get 요청
                 .loginProcessingUrl("/account/login") // login service Post 요청
                 .failureHandler(new AuthFailureHandler())
+//                .successForwardUrl() //성공했을 때
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(principalOauth2Service)
+                .and()
                 .defaultSuccessUrl("/index");
     }
 }
