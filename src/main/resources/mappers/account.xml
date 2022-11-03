@@ -24,8 +24,17 @@
         <collection property="role" resultMap="role"/> <!--여기 안에 role이 포함되어 있다.-->
 
     </resultMap>
+    <update id="updateProvider" parameterType="com.stussy.stussyclone20220930jugeon.domain.User">
+        update
+            user_mst
+        set
+            provider = #{provider},
+            update_date = now()
+        where
+            id = #{id}
+    </update>
 
-   <select id="findUserByEmail" parameterType="String" resultMap="user"> <!--  join하면 무조건 resultMap-->
+    <select id="findUserByEmail" parameterType="String" resultMap="user"> <!--  join하면 무조건 resultMap-->
        select
             um.id,
             um.email,

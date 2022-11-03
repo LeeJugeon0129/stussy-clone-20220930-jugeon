@@ -60,7 +60,7 @@ public class PrincipalOauth2Service extends DefaultOAuth2UserService {
             user = User.builder()
                     .email(email)
                     .password(new BCryptPasswordEncoder().encode(UUID.randomUUID().toString())) //랜덤하게 임시 비밀번호 생성
-                    .name((String)attributes.get("name"))
+                    .name((String) oauth2Attributes.get("name"))
                     .provider(provider)
                     .role_id(1) // 1: 일반계정
                     .build();
@@ -68,9 +68,14 @@ public class PrincipalOauth2Service extends DefaultOAuth2UserService {
             accountRepository.saveUser(user);
         }else if(user.getProvider()==null) {
             // 비었으면 연동해줘라
-
+            user.setProvider(provider);
+            accountRepository.updateProvider(user);
+        }else if(!user.getProvider().contains(provider)) { //포함하고있으면~
+            user.setProvider(user.getProvider() + ", " + provider);
+            accountRepository.updateProvider(user);
         }
 
-        return new PrincipalDetails(user, attributes);
+
+        return new PrincipalDetails(user, oauth2Attributes);
     }
 }
