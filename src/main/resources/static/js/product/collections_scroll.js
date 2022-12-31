@@ -87,21 +87,20 @@ class CollectionsService {
 
 
     loadCollections() {
-        if(this.collectionsEntity.page == 1 || this.collectionsEntity.page < Number(this.collectionsEntity.maxPage) + 1){
+        if(this.collectionsEntity.page == 1 || this.collectionsEntity.page < Number(this.collectionsEntity.maxPage) + 1) {
             const responseData = CollectionsApi.getInstance().getCollections(this.collectionsEntity.page);
             console.log(responseData);
             
             if(responseData.length > 0) {
                 this.collectionsEntity.totalCount = responseData[0].productTotalCount;
-                this.collectionsEntity.maxPage = responseData[0].productTotalCount % 16 == 0
-                                                    ? responseData[0].productTotalCount / 16 
-                                                    : Math.floor(responseData[0].productTotalCount / 16) + 1;
+                this.collectionsEntity.maxPage = responseData[0].productTotalCount % 16 == 0 
+                                                ? responseData[0].productTotalCount / 16
+                                                : Math.floor(responseData[0].productTotalCount / 16) + 1;
                 this.getCollections(responseData);
             }else {
                 alert("해당 카테고리에 등록된 상품 정보가 없습니다.");
                 location.href = "/collections/all";
             }
-            
         }
     }
 

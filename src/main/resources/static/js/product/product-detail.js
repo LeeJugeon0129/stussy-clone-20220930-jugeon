@@ -33,6 +33,9 @@ class ProductDetail {
 
     constructor() {
         const responseData = ProductApi.getInstance().getProductData();
+        
+        console.log(responseData);
+
         this.loadProductImgs(responseData);
         this.loadProductDetail(responseData);
         this.loadProductColors(responseData);

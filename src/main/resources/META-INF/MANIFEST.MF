@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.stussy.stussyclone20220930jugeon.StussyClone20220930Juge
+ onApplication
+
